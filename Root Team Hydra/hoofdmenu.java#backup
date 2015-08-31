@@ -1,0 +1,279 @@
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.*;
+
+/**
+ * Write a description of class hoofdmenu here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+
+
+
+public class hoofdmenu extends World
+{
+     public static DrawingContext DrawingContext;
+    /**
+     * Constructor for objects of class hoofdmenu.
+     * 
+     */
+    
+    
+    
+    //Deze vars zijn voor de voortgangsbalk/score.
+    hoofdmenu.Vector2 voortgangsbalkPosition;
+    
+    hoofdmenu.Vector2 ster1Position;
+    hoofdmenu.Vector2 ster2Position;
+    hoofdmenu.Vector2 ster3Position;
+    hoofdmenu.Vector2 ster4Position;
+    hoofdmenu.Vector2 ster5Position;
+    hoofdmenu.Vector2 ster6Position;
+    
+    hoofdmenu.Vector2 sterLeeg1Position;
+    hoofdmenu.Vector2 sterLeeg2Position;
+    hoofdmenu.Vector2 sterLeeg3Position;
+    hoofdmenu.Vector2 sterLeeg4Position;
+    hoofdmenu.Vector2 sterLeeg5Position;
+    hoofdmenu.Vector2 sterLeeg6Position;
+    
+    hoofdmenu.Vector2 linkerrandPosition;
+    
+    List<hoofdmenu.Vector2> balkjePositions;
+    
+    hoofdmenu.Texture2D voortgangsbalkstreepAppearance;
+    hoofdmenu.Texture2D voortgangsbalkAppearance;
+    hoofdmenu.Texture2D sterAppearance;
+    hoofdmenu.Texture2D sterLeegAppearance;
+    
+    int dada;
+    int voortgangsPunten = EpicVrachtOverslaan.GameLogicVrachtvoortgangsPunten;
+    
+    //Dit is de score-class.
+    static class ScoreSysteem
+    {
+        static int score = 0;
+        
+    }
+    
+    //Dit zijn de Dr. Maggiore Libraries.
+    public static class Vector2
+    {
+        public float X, Y;
+        
+        public static final Vector2 Zero = new Vector2(0,0);
+        public static final Vector2 UnitX = new Vector2(1,0);
+        public static final Vector2 UnitY = new Vector2(0,1);
+        
+        public Vector2(float x, float y) {
+            X = x; Y = y;
+        }
+        
+        public Vector2 mul(float k) 
+        {
+            return new Vector2(X * k, Y * k);
+        }
+
+        public Vector2 add(Vector2 v) 
+        {
+            return new Vector2(X + v.X, Y + v.Y);
+        }
+
+        public Vector2 sub(Vector2 v) 
+        {
+            return this.add(v.min());
+        }
+
+        public Vector2 min() 
+        {
+            return new Vector2(-X, -Y);
+        }
+        
+        public static float DistanceY(Vector2 a, Vector2 b)
+        {
+            Vector2 ab = a.sub(b);
+            return (float)Math.sqrt(ab.Y * ab.Y);
+        }
+        
+        public static float Distance(Vector2 a, Vector2 b) 
+        {
+            Vector2 ab = a.sub(b);
+            return (float)Math.sqrt(ab.X * ab.X + ab.Y * ab.Y);
+        }
+    }
+    
+    public static class Texture2D
+    {
+        public String Path;
+        GreenfootImage Image;
+        
+        public int getWidth() { return Image.getWidth(); }
+        public int getHeight() { return Image.getHeight(); }
+        
+        public Texture2D(String path) {
+            Path = path;
+            Image = new GreenfootImage(path);
+        }
+    }
+
+    List<BasicEntity> entities;
+    public class DrawingContext {        
+        public void BeginDraw()
+        {
+            for(BasicEntity e : entities)
+                removeObject(e);
+            entities.clear();
+        }
+        
+        public void Draw(Texture2D t, Vector2 p)
+        {
+            BasicEntity e = new BasicEntity(t.Path);
+            entities.add(e);
+            addObject(e, (int)p.X, (int)p.Y);
+            //SpriteBatch.Draw(t, p - new Vector2(t.Width, t.Height) / 2, c);
+        }
+    }
+    
+    private static class BasicEntity extends Actor
+    {
+        public BasicEntity(String image)
+        {
+            setImage(new GreenfootImage(image));
+        }
+    }  
+    
+    
+    
+    public hoofdmenu()
+    {
+       
+        /// Hier bepalen we de grootte van de nieuwe wereld.
+        super(952, 551, 1);
+        //Hier maken we enkele actors aan die meteen bij het opstarten van het spel er moeten zijn.
+        addObject(new menuicoon(), getWidth()- 17 , 17);
+        addObject(new minigameloods(), 350, 115);
+        addObject(new minigamexray(), 765, 457);
+        addObject(new minigamecontainer(), 388, 235);
+        addObject(new minigamebagger(), 577, 278);
+        
+        
+        DrawingContext = new DrawingContext();
+        entities = new ArrayList<BasicEntity>();
+    
+        //Deze objecten stellen de vlaggetjes naast de minigame stipjes voor.
+        addObject(new minigameloodsvlag(), 385, 52);
+        //addObject(new minigamecontainervlag(), 420, 175);
+        addObject(new minigamebaggervlag(), 610, 215);
+        addObject(new minigamexrayvlag(), 800, 400);
+        
+        //Deze vars zijn voor de voortgangs-scorebalk
+        voortgangsbalkPosition = new hoofdmenu.Vector2(476, 18);
+        ster1Position = new hoofdmenu.Vector2(476, 38);
+        ster2Position = new hoofdmenu.Vector2(520, 38);
+        ster3Position = new hoofdmenu.Vector2(530, 38);
+        ster4Position = new hoofdmenu.Vector2(565, 38);
+        ster5Position = new hoofdmenu.Vector2(575, 38);
+        ster6Position = new hoofdmenu.Vector2(585, 38);
+        
+        sterLeeg1Position = new hoofdmenu.Vector2(476, 38);
+        sterLeeg2Position = new hoofdmenu.Vector2(520, 38);
+        sterLeeg3Position = new hoofdmenu.Vector2(530, 38);
+        sterLeeg4Position = new hoofdmenu.Vector2(565, 38);
+        sterLeeg5Position = new hoofdmenu.Vector2(575, 38);
+        sterLeeg6Position = new hoofdmenu.Vector2(585, 38);
+        
+        balkjePositions = new ArrayList<hoofdmenu.Vector2>();
+               
+        voortgangsbalkstreepAppearance = new hoofdmenu.Texture2D("loods_progress_fill.png");
+        voortgangsbalkAppearance = new hoofdmenu.Texture2D("loods_progress_bar_bg.png");
+        sterAppearance = new hoofdmenu.Texture2D("loods-ster.png");
+        sterLeegAppearance = new hoofdmenu.Texture2D("loods-ster-leeg.png");
+        
+        /*
+        * SCORE-CODE
+        */
+              
+        
+        for (int i = 0; i < voortgangsPunten; i++){
+            hoofdmenu.Vector2 newVoortangsPositie = hoofdmenu.Vector2.Zero;
+            newVoortangsPositie = new hoofdmenu.Vector2(377 + 1* i, 18);
+            balkjePositions.add(newVoortangsPositie);
+        }
+                  
+        /*
+        * DRAW-CODE
+        */
+       
+        
+        //Alle code hieronder doet het daadwerkelijke "plaatsen" v.d. objecten onder de door ons hierboven gegeven voorwaarden.
+        hoofdmenu.DrawingContext drawingContext = hoofdmenu.DrawingContext;
+        drawingContext.BeginDraw();
+        /*
+        hoofdmenu.DrawingContext.Draw(truckGeelAppearance, truckGeelPosition);
+        hoofdmenu.DrawingContext.Draw(truckRoodAppearance, truckRoodPosition);
+        hoofdmenu.DrawingContext.Draw(truckGroenAppearance, truckGroenPosition);
+        hoofdmenu.DrawingContext.Draw(truckBlauwAppearance, truckBlauwPosition);
+       
+        for(hoofdmenu.Vector2 a : containerGeelPosition)
+        {
+            drawingContext.Draw(containerGeelAppearance, a);
+        }
+        
+        for(hoofdmenu.Vector2 a : containerRoodPosition)
+        {
+            drawingContext.Draw(containerRoodAppearance, a);
+        }
+        
+        for(hoofdmenu.Vector2 a : containerGroenPosition)
+        {
+            drawingContext.Draw(containerGroenAppearance, a);
+        }
+        
+        for(hoofdmenu.Vector2 a : containerBlauwPosition)
+        {
+            drawingContext.Draw(containerBlauwAppearance, a);
+        }
+        
+        hoofdmenu.DrawingContext.Draw(grijperAppearance, grijperPosition);
+        
+        hoofdmenu.DrawingContext.Draw(voortgansbalkAppearance, voortangsbalkPosition);
+        hoofdmenu.DrawingContext.Draw(indicatiebalkAppearance, indicatiebalkPosition);
+        */
+        //Deze code is voor het drawen v.d. voortgangsblak, die heeft meer aandacht nodig.
+        hoofdmenu.DrawingContext.Draw(voortgangsbalkAppearance, voortgangsbalkPosition);
+        
+        if (voortgangsPunten >= 100) {
+           hoofdmenu.DrawingContext.Draw(sterAppearance, ster1Position);  
+        }
+        else if (voortgangsPunten < 100){
+            hoofdmenu.DrawingContext.Draw(sterLeegAppearance, sterLeeg1Position);
+            
+        }
+        if (voortgangsPunten >= 150) {
+           hoofdmenu.DrawingContext.Draw(sterAppearance, ster2Position);  
+           hoofdmenu.DrawingContext.Draw(sterAppearance, ster3Position); 
+        }
+        else if (voortgangsPunten < 150){
+            hoofdmenu.DrawingContext.Draw(sterLeegAppearance, sterLeeg2Position);
+            hoofdmenu.DrawingContext.Draw(sterLeegAppearance, sterLeeg3Position);
+        }
+        if (voortgangsPunten >= 200) {
+           hoofdmenu.DrawingContext.Draw(sterAppearance, ster4Position);
+           hoofdmenu.DrawingContext.Draw(sterAppearance, ster5Position); 
+           hoofdmenu.DrawingContext.Draw(sterAppearance, ster6Position); 
+        }
+        else if (voortgangsPunten < 200){
+            hoofdmenu.DrawingContext.Draw(sterLeegAppearance, sterLeeg4Position);
+            hoofdmenu.DrawingContext.Draw(sterLeegAppearance, sterLeeg5Position);
+            hoofdmenu.DrawingContext.Draw(sterLeegAppearance, sterLeeg6Position);
+        }
+        
+        
+        
+        
+        for(hoofdmenu.Vector2 a : balkjePositions){
+          drawingContext.Draw(voortgangsbalkstreepAppearance, a); 
+        }
+        
+    }
+}
